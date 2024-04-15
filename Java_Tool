@@ -1,0 +1,59 @@
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class ProgrammingTimerApp extends Application {
+
+    private Timer timer;
+    private long startTime;
+    private long maxDuration = 3600000; // Max duration in milliseconds (1 hour)
+
+    @Override
+    public void start(Stage primaryStage) {
+        Button startButton = new Button("Start Programming Timer");
+        startButton.setOnAction(event -> startTimer());
+
+        VBox root = new VBox(startButton);
+        Scene scene = new Scene(root, 300, 200);
+
+        primaryStage.setTitle("Programming Timer");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void startTimer() {
+        timer = new Timer();
+        startTime = System.currentTimeMillis();
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                long elapsedTime = System.currentTimeMillis() - startTime;
+                if (elapsedTime >= maxDuration) {
+                    Platform.runLater(() -> showAlert());
+                    timer.cancel();
+                }
+            }
+        }, 0, 1000); // Check every second
+    }
+
+    private void showAlert() {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Drink some water");
+        alert.setHeaderText("Touch grass!!!!!");
+        alert.setContentText("Get a life");
+        alert.showAndWait();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
